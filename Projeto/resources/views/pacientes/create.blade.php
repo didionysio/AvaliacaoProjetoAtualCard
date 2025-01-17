@@ -54,8 +54,6 @@
                         @enderror
                     </div>
 
-
-
                     <div class="mb-4">
                         <label for="bairro" class="block text-sm font-medium text-gray-700">Bairro</label>
                         <input type="text" name="bairro" id="bairro" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" value="{{ old('bairro') }}" readonly>
@@ -99,9 +97,8 @@
 
 <script>
     document.getElementById('cep').addEventListener('blur', function () {
-        let cep = this.value.replace(/\D/g, ''); // Remove caracteres não numéricos
-        console.log(cep)
-        if (cep.length === 8) { // Verifica se o CEP possui 8 dígitos
+        let cep = this.value.replace(/\D/g, '');
+        if (cep.length === 8) {
             fetch(`https://viacep.com.br/ws/${cep}/json/`)
                 .then(response => {
                     if (!response.ok) {
@@ -115,7 +112,6 @@
                         return;
                     }
 
-                    // Preenche os campos de endereço com a resposta da API
                     document.getElementById('endereco').value = data.logradouro || '';
                     document.getElementById('bairro').value = data.bairro || '';
                     document.getElementById('cidade').value = data.localidade || '';

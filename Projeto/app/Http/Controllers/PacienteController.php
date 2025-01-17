@@ -9,7 +9,7 @@ use App\Rules\ValidaCpf;
 class PacienteController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Exibi uma listagem dos Pacientes.
      */
     public function index()
     {
@@ -18,7 +18,7 @@ class PacienteController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Exibe formulário para cadastro de paciente
      */
     public function create()
     {
@@ -26,7 +26,7 @@ class PacienteController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Armazena paciente no banco, validando cpf e cep
      */
     public function store(Request $request)
     {
@@ -46,34 +46,69 @@ class PacienteController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Exibe os detalhes de um paciente específico.
+     *
+     * @param string $id O ID do paciente a ser exibido.
+     * @return \Illuminate\View\View A view com os detalhes do paciente.
      */
     public function show(string $id)
     {
-        //
+        $paciente = Paciente::findOrFail($id);
+        return view('pacientes.show', compact('paciente'));
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Exibe o formulário para edição de um paciente específico.
+     *
+     * @param int|string $id O ID do paciente a ser editado.
+     * @return \Illuminate\View\View A view com o formulário de edição do paciente.
+     *
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        $paciente = Paciente::findOrFail($id);
+        return view('pacientes.edit', compact('paciente'));
     }
 
     /**
-     * Update the specified resource in storage.
+     * Atualiza os dados de um paciente específico.
+     *
+     * @param \Illuminate\Http\Request $request Os dados enviados pelo formulário.
+     * @param int|string $id O ID do paciente a ser atualizado.
+     * @return \Illuminate\Http\RedirectResponse Redireciona para a lista de pacientes com mensagem de sucesso.
+     *
      */
     public function update(Request $request, string $id)
     {
-        //
+        $paciente = Paciente::findOrFail($id);
+
+        // Valida os campos (CPF não pode ser alterado)
+        $request->validate([
+            'nome' => 'required|string|max:255',
+            'email' => 'required|email|unique:pacientes,email,' . $paciente->id,
+            'cep' => 'required',
+            'endereco' => 'required',
+            'numero' => 'required',
+        ]);
+
+        $paciente->update($request->except('cpf'));
+
+        return redirect()->route('pacientes.index')
+                        ->with('success', 'Paciente atualizado com sucesso.');
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove um paciente específico do banco de dados.
+     *
+     * @param int|string $id O ID do paciente a ser removido.
+     * @return \Illuminate\Http\RedirectResponse Redireciona para a lista de pacientes com mensagem de sucesso.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $paciente = Paciente::findOrFail($id);
+        $paciente->delete();
+
+        return redirect()->route('pacientes.index')
+                        ->with('success', 'Paciente removido com sucesso.');
     }
 }
