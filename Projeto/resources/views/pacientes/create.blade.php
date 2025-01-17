@@ -3,12 +3,8 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="py-12">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <!-- Flex Container -->
                     <div class="p-6 text-gray-900 flex justify-between items-center">
-                        <!-- Título -->
                         <span>{{ __("Adicionar Pacientes") }}</span>
-        
-                        <!-- Botão -->
                         <a href="{{ route('pacientes.index') }}" 
                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                             Voltar
@@ -94,35 +90,3 @@
         </div>
     </div>
 </x-app-layout>
-
-<script>
-    document.getElementById('cep').addEventListener('blur', function () {
-        let cep = this.value.replace(/\D/g, '');
-        if (cep.length === 8) {
-            fetch(`https://viacep.com.br/ws/${cep}/json/`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Erro ao buscar o CEP.');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.erro) {
-                        alert('CEP não encontrado.');
-                        return;
-                    }
-
-                    document.getElementById('endereco').value = data.logradouro || '';
-                    document.getElementById('bairro').value = data.bairro || '';
-                    document.getElementById('cidade').value = data.localidade || '';
-                    document.getElementById('estado').value = data.uf || '';
-                })
-                .catch(error => {
-                    console.error('Erro:', error);
-                    alert('Erro ao buscar o CEP.');
-                });
-        } else {
-            alert('CEP inválido. Verifique e tente novamente.');
-        }
-    });
-</script>

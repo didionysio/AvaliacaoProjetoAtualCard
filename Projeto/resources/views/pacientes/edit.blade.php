@@ -8,8 +8,6 @@
                     <form action="{{ route('pacientes.update', $paciente->id) }}" method="POST">
                         @csrf
                         @method('PUT')
-
-                        <!-- Nome -->
                         <div class="mb-4">
                             <label for="nome" class="block text-sm font-medium text-gray-700">Nome</label>
                             <input type="text" name="nome" id="nome" 
@@ -19,16 +17,12 @@
                                 <div class="text-red-500 text-sm">{{ $message }}</div>
                             @enderror
                         </div>
-
-                        <!-- CPF -->
                         <div class="mb-4">
                             <label for="cpf" class="block text-sm font-medium text-gray-700">CPF</label>
                             <input type="text" name="cpf" id="cpf" 
                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm bg-gray-100 cursor-not-allowed" 
                                    value="{{ $paciente->cpf }}" readonly>
                         </div>
-
-                        <!-- E-mail -->
                         <div class="mb-4">
                             <label for="email" class="block text-sm font-medium text-gray-700">E-mail</label>
                             <input type="email" name="email" id="email" 
@@ -77,8 +71,6 @@
                                 <div class="text-red-500 text-sm">{{ $message }}</div>
                             @enderror
                         </div>
-
-                        <!-- Botões -->
                         <div class="flex justify-end space-x-2">
                             <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                 Salvar Alterações
@@ -94,36 +86,3 @@
         </div>
     </div>
 </x-app-layout>
-
-<script>
-    document.getElementById('cep').addEventListener('blur', function () {
-        let cep = this.value.replace(/\D/g, ''); // Remove caracteres não numéricos
-        if (cep.length === 8) { // Verifica se o CEP possui 8 dígitos
-            fetch(`https://viacep.com.br/ws/${cep}/json/`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Erro ao buscar o CEP.');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.erro) {
-                        alert('CEP não encontrado.');
-                        return;
-                    }
-
-                    // Preenche os campos de endereço com a resposta da API
-                    document.getElementById('endereco').value = data.logradouro || '';
-                    document.getElementById('bairro').value = data.bairro || '';
-                    document.getElementById('cidade').value = data.localidade || '';
-                    document.getElementById('estado').value = data.uf || '';
-                })
-                .catch(error => {
-                    console.error('Erro:', error);
-                    alert('Erro ao buscar o CEP.');
-                });
-        } else {
-            alert('CEP inválido. Verifique e tente novamente.');
-        }
-    });
-</script>
