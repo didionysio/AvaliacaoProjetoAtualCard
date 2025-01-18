@@ -3,62 +3,109 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Medico;
+use App\Models\Especialidade;
 
 class MedicoController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Exibe uma lista de médicos.
+     *
+     * @return \Illuminate\View\View
      */
     public function index()
     {
-        //
+        $medicos = Medico::paginate(10);
+        return view('medicos.index', compact('medicos'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Exibe o formulário para criar um novo médico.
+     *
+     * @return \Illuminate\View\View
      */
     public function create()
     {
-        //
+        $especialidades = Especialidade::all();
+        return view('medicos.create',compact('especialidades'));
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Armazena um novo médico no banco de dados.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nome' => 'required|string|max:255',
+            'crm' => 'required|string|max:50|unique:medicos,crm',
+            'especialidade' => 'required|string|max:255',
+        ]);
+
+        Medico::create($request->all());
+
+        return redirect()->route('medicos.index')->with('success', 'Médico cadastrado com sucesso.');
     }
 
     /**
-     * Display the specified resource.
+     * Exibe os detalhes de um médico específico.
+     *
+     * @param  int|string $id
+     * @return \Illuminate\View\View
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        $medico = Medico::findOrFail($id);
+        return view('medicos.show', compact('medico'));
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Exibe o formulário para editar um médico específico.
+     *
+     * @param  int|string $id
+     * @return \Illuminate\View\View
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        $medico = Medico::findOrFail($id);
+        return view('medicos.edit', compact('medico'));
     }
 
     /**
-     * Update the specified resource in storage.
+     * Atualiza os dados de um médico específico.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param  int|string $id
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $medico = Medico::findOrFail($id);
+
+        $request->validate([
+            'nome' => 'required|string|max:255',
+            'crm' => 'required|string|max:50|unique:medicos,crm,' . $medico->id,
+            'especialidade' => 'required|string|max:255',
+        ]);
+
+        $medico->update($request->all());
+
+        return redirect()->route('medicos.index')->with('success', 'Médico atualizado com sucesso.');
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove um médico do banco de dados.
+     *
+     * @param  int|string $id
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $medico = Medico::findOrFail($id);
+        $medico->delete();
+
+        return redirect()->route('medicos.index')->with('success', 'Médico removido com sucesso.');
     }
 }

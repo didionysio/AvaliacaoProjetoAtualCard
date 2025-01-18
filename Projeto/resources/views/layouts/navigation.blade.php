@@ -16,6 +16,16 @@
                         {{ __('Pacientes') }}
                     </x-nav-link>
                 </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('medicos.index')" :active="request()->routeIs('medicos.index')">
+                        {{ __('Medicos') }}
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('especialidades.index')" :active="request()->routeIs('especialidade.index')">
+                        {{ __('Especialidades') }}
+                    </x-nav-link>
+                </div>
             </div>
 
             <!-- Settings Dropdown -->
