@@ -1,8 +1,11 @@
 <?php
 
+use App\Http\Controllers\EspecialidadeController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PacienteController;
+use App\Http\Controllers\MedicoController;
+
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
@@ -18,6 +21,8 @@ Route::get('/home', function () {
 });
 
 Route::resource('pacientes', PacienteController::class);
+Route::resource('medicos', MedicoController::class);
+Route::resource('especialidades',EspecialidadeController::class);
 
 Route::get('/home', function () {
     return view('home');
