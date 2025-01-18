@@ -28,7 +28,7 @@
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $medico->id }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $medico->nome }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $medico->crm }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ $medico->especialidade }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ $medico->especialidade->nome }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap flex space-x-2">
                                             <a href="{{ route('medicos.show', $medico->id) }}" 
                                                class="text-blue-600 hover:text-blue-900">Ver</a>

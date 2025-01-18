@@ -40,8 +40,13 @@ class MedicoController extends Controller
     {
         $request->validate([
             'nome' => 'required|string|max:255',
-            'crm' => 'required|string|max:50|unique:medicos,crm',
-            'especialidade' => 'required|string|max:255',
+            'crm' => [
+                'required',
+                'string',
+                'regex:/^CRM-[A-Z]{2} \d{1,6}$/',
+                'unique:medicos,crm',
+            ],
+            'especialidade_id' => 'required|exists:especialidades,id',
         ]);
 
         Medico::create($request->all());
@@ -70,7 +75,9 @@ class MedicoController extends Controller
     public function edit($id)
     {
         $medico = Medico::findOrFail($id);
-        return view('medicos.edit', compact('medico'));
+        $especialidades = Especialidade::all();
+    
+        return view('medicos.edit', compact('medico', 'especialidades'));
     }
 
     /**
@@ -83,15 +90,14 @@ class MedicoController extends Controller
     public function update(Request $request, $id)
     {
         $medico = Medico::findOrFail($id);
-
+    
         $request->validate([
             'nome' => 'required|string|max:255',
-            'crm' => 'required|string|max:50|unique:medicos,crm,' . $medico->id,
-            'especialidade' => 'required|string|max:255',
+            'especialidade_id' => 'required|exists:especialidades,id',
         ]);
-
-        $medico->update($request->all());
-
+    
+        $medico->update($request->only('nome', 'especialidade_id'));
+    
         return redirect()->route('medicos.index')->with('success', 'Médico atualizado com sucesso.');
     }
 
