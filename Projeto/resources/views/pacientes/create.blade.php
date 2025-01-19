@@ -12,7 +12,18 @@
                     </div>
                 </div>
             </div>  
-
+            @if(session('success'))
+                <div class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
+                    {{ session('success') }}
+                </div>
+            @endif
+            
+            @if(session('error'))
+                <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+                    {{ session('error') }}
+                </div>
+            @endif
+            
             <div class="bg-white p-6 mt-6 rounded-lg shadow-sm">
                 <h1 class="mb-4 text-xl font-bold text-gray-800">Adicionar Paciente</h1>
                 <form action="{{ route('pacientes.store') }}" method="POST">
@@ -33,7 +44,41 @@
                             <div class="text-red-500 text-sm">{{ $message }}</div>
                         @enderror
                     </div>
-
+                    <div class="mb-4">
+                        <label for="data_nascimento" class="block text-sm font-medium text-gray-700">Data de Nascimento</label>
+                        <input 
+                            type="date" 
+                            name="data_nascimento" 
+                            id="data_nascimento" 
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" 
+                            value="{{ old('data_nascimento', $paciente->data_nascimento ?? '') }}" 
+                            max="{{ date('Y-m-d') }}" 
+                            required>
+                        @error('data_nascimento')
+                            <div class="text-red-500 text-sm">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    
+                    <div class="mb-4" id="cpf_responsavel_wrapper" style="display: none;">
+                        <label for="cpf_responsavel" class="block text-sm font-medium text-gray-700">CPF do Responsável</label>
+                        <input 
+                            type="text" 
+                            name="cpf_responsavel" 
+                            id="cpf_responsavel" 
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" 
+                            value="{{ old('cpf_responsavel') }}">
+                        @error('cpf_responsavel')
+                            <div class="text-red-500 text-sm">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <!-- Telefone -->
+                    <h2 class="mb-4 text-lg font-bold text-gray-800">Telefones</h2>
+                    <div id="telefone-container">
+                        <x-telefone-input />
+                    </div>
+                    <button type="button" id="add-telefone" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">
+                        Adicionar Telefone
+                    </button>      
                     <div class="mb-4">
                         <label for="email" class="block text-sm font-medium text-gray-700">E-mail</label>
                         <input type="email" name="email" id="email" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" value="{{ old('email') }}" required>
@@ -44,31 +89,50 @@
 
                     <div class="mb-4">
                         <label for="cep" class="block text-sm font-medium text-gray-700">CEP</label>
-                        <input type="text" name="cep" id="cep" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" value="{{ old('cep') }}" required>
+                        <input type="text" name="cep" id="cep" 
+                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" 
+                               value="{{ old('cep') }}" required>
                         @error('cep')
+                            <div class="text-red-500 text-sm">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="endereco" class="block text-sm font-medium text-gray-700">Endereço</label>
+                        <input type="text" name="endereco" id="endereco" 
+                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" 
+                               value="{{ old('endereco') }}" required>
+                        @error('endereco')
                             <div class="text-red-500 text-sm">{{ $message }}</div>
                         @enderror
                     </div>
 
                     <div class="mb-4">
                         <label for="bairro" class="block text-sm font-medium text-gray-700">Bairro</label>
-                        <input type="text" name="bairro" id="bairro" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" value="{{ old('bairro') }}" readonly>
+                        <input type="text" name="bairro" id="bairro" 
+                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" 
+                               value="{{ old('bairro') }}" required>
+                        @error('bairro')
+                            <div class="text-red-500 text-sm">{{ $message }}</div>
+                        @enderror
                     </div>
                     
                     <div class="mb-4">
                         <label for="cidade" class="block text-sm font-medium text-gray-700">Cidade</label>
-                        <input type="text" name="cidade" id="cidade" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" value="{{ old('cidade') }}" readonly>
+                        <input type="text" name="cidade" id="cidade" 
+                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" 
+                               value="{{ old('cidade') }}" required>
+                        @error('cidade')
+                            <div class="text-red-500 text-sm">{{ $message }}</div>
+                        @enderror
                     </div>
                     
                     <div class="mb-4">
                         <label for="estado" class="block text-sm font-medium text-gray-700">Estado</label>
-                        <input type="text" name="estado" id="estado" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" value="{{ old('estado') }}" readonly>
-                    </div>
-
-                    <div class="mb-4">
-                        <label for="endereco" class="block text-sm font-medium text-gray-700">Endereço</label>
-                        <input type="text" name="endereco" id="endereco" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" value="{{ old('endereco') }}" required>
-                        @error('endereco')
+                        <input type="text" name="estado" id="estado" 
+                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" 
+                               value="{{ old('estado') }}" required>
+                        @error('estado')
                             <div class="text-red-500 text-sm">{{ $message }}</div>
                         @enderror
                     </div>

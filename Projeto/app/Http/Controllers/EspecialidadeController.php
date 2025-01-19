@@ -14,7 +14,7 @@ class EspecialidadeController extends Controller
      */
     public function index()
     {
-        $especialidades = Especialidade::all();
+        $especialidades = Especialidade::paginate(10);
         return view('especialidades.index', compact('especialidades'));
     }
 
@@ -99,15 +99,24 @@ class EspecialidadeController extends Controller
      */
     public function destroy($id)
     {
+        // Impede a exclusão da especialidade pediatria
         if ($id == 1) {
             return redirect()->route('especialidades.index')
                              ->with('error', 'A especialidade "Pediatria" não pode ser excluída, pois é obrigatória.');
         }
     
         $especialidade = Especialidade::findOrFail($id);
+    
+        // Verifica se a especialidade está vinculada a algum médico
+        if ($especialidade->medicos()->exists()) {
+            return redirect()->route('especialidades.index')
+                             ->with('error', 'Não é possível excluir a especialidade, pois está vinculada a um ou mais médicos.');
+        }
+    
         $especialidade->delete();
     
         return redirect()->route('especialidades.index')
                          ->with('success', 'Especialidade removida com sucesso.');
     }
+    
 }

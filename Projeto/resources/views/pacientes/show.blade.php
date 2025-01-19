@@ -40,6 +40,17 @@
                         <span>{{ $paciente->created_at->format('d/m/Y H:i') }}</span>
                     </div>
 
+                    <div class="mb-4">
+                        <strong>Telefones:</strong>
+                        <ul>
+                            @forelse ($paciente->telefones as $telefone)
+                                <li>{{ $telefone->numero }}</li>
+                            @empty
+                                <li>Nenhum telefone cadastrado.</li>
+                            @endforelse
+                        </ul>
+                    </div>
+
                     <div class="flex justify-end mt-6">
                         <a href="{{ route('pacientes.index') }}" 
                            class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">

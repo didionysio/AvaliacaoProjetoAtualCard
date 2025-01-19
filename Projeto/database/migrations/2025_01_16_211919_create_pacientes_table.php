@@ -18,8 +18,13 @@ return new class extends Migration
             $table->timestamp('data_cadastro');
             $table->string('email')->unique();
             $table->string('cep');
+            $table->string('bairro');
+            $table->string('cidade');
+            $table->string('estado');
             $table->string('endereco');
             $table->string('numero');
+            $table->date('data_nascimento');
+            $table->string('cpf_responsavel')->nullable();
             $table->timestamps();
         });
     }

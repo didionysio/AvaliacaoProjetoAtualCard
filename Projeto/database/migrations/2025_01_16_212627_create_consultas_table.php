@@ -20,7 +20,7 @@ return new class extends Migration
                   ->constrained('medicos')
                   ->cascadeOnDelete();
             $table->dateTime('data_consulta');
-            $table->dateTime('data_agendamento');
+            $table->dateTime('data_agendamento')->default(now());
             $table->timestamps();
         });
     }

@@ -7,7 +7,7 @@
                         <h1 class="text-2xl font-bold">Lista de Especialidades</h1>
                         <a href="{{ route('especialidades.create') }}" 
                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                            + Adicionar Especialidade
+                            Adicionar Especialidade
                         </a>
                     </div>
                     
@@ -45,6 +45,9 @@
                                 @endforeach
                             </tbody>
                         </table>
+                        <div class="mt-4">
+                            {{ $especialidades->links() }}
+                        </div>
                     @else
                         <p class="text-gray-500">Nenhuma especialidade cadastrada no momento.</p>
                     @endif
