@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Paciente;
 use Illuminate\Http\Request;
 use App\Rules\ValidaCpf;
+use Carbon\Carbon;
 
 class PacienteController extends Controller
 {
@@ -32,12 +33,17 @@ class PacienteController extends Controller
     {
         $request->validate([
             'nome' => 'required|string|max:255',
-            'cpf' => ['required', 'unique:pacientes,cpf', new ValidaCpf],
+            'cpf' => ['required', 'string', 'unique:pacientes,cpf', new ValidaCpf()],
             'email' => 'required|email|unique:pacientes,email',
-            'cep' => 'required',
-            'endereco' => 'required',
-            'numero' => 'required',
+            'cep' => 'required|string|max:9',
+            'bairro' => 'required|string|max:255',
+            'cidade' => 'required|string|max:255',
+            'estado' => 'required|string|max:2',
+            'endereco' => 'required|string|max:255',
+            'numero' => 'required|string|max:10',
+            'data_nascimento' => 'required|date|before_or_equal:today',
         ]);
+        
     
         Paciente::create($request->all());
     
@@ -111,4 +117,23 @@ class PacienteController extends Controller
         return redirect()->route('pacientes.index')
                         ->with('success', 'Paciente removido com sucesso.');
     }
+
+    /**
+     * Retorna a idade de um paciente com base na data de nascimento.
+     *
+     * @param int $id O ID do paciente.
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function idade($id)
+    {
+        $paciente = Paciente::findOrFail($id);
+
+        if (!$paciente->data_nascimento) {
+            return response()->json(['erro' => 'Data de nascimento não encontrada para o paciente.'], 400);
+        }
+
+        $idade = abs(now()->diffInYears(Carbon::parse($paciente->data_nascimento)));
+        return response()->json(['idade' => $idade]);
+    }
+
 }

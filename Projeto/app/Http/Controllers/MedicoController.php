@@ -114,4 +114,31 @@ class MedicoController extends Controller
 
         return redirect()->route('medicos.index')->with('success', 'Médico removido com sucesso.');
     }
+
+    /**
+     * Busca médicos com base na especialidade e CRM.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function search(Request $request)
+    {
+        $especialidadeId = $request->input('especialidade_id');
+        $crm = $request->input('crm');
+        $isPediatria = $request->input('pediatria', false);
+    
+        $medicos = Medico::query()
+            ->when($isPediatria, function ($query) {
+                $query->where('especialidade_id', 1);
+            })
+            ->when($especialidadeId, function ($query) use ($especialidadeId) {
+                $query->where('especialidade_id', $especialidadeId);
+            })
+            ->when($crm, function ($query) use ($crm) {
+                $query->where('crm', 'like', "%{$crm}%");
+            })
+            ->get();
+    
+        return response()->json($medicos);
+    }
 }

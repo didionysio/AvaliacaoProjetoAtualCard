@@ -3,7 +3,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (cepInput) {
         cepInput.addEventListener('blur', function () {
-            let cep = this.value.replace(/\D/g, ''); // Remove caracteres não numéricos
+            const cep = this.value.replace(/\D/g, ''); // Remove caracteres não numéricos
+            
             if (cep.length === 8) { // Verifica se o CEP possui 8 dígitos
                 fetch(`https://viacep.com.br/ws/${cep}/json/`)
                     .then(response => {
@@ -23,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         document.getElementById('bairro').value = data.bairro || '';
                         document.getElementById('cidade').value = data.localidade || '';
                         document.getElementById('estado').value = data.uf || '';
+                        document.getElementById('cep').value = data.cep || ''; // Atualiza o CEP formatado, se necessário
                     })
                     .catch(error => {
                         console.error('Erro:', error);
