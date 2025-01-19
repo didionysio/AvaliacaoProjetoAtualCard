@@ -3,12 +3,9 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="py-12">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <!-- Flex Container -->
                     <div class="p-6 text-gray-900 flex justify-between items-center">
-                        <!-- Título -->
                         <span>{{ __("Pacientes") }}</span>
         
-                        <!-- Botão -->
                         <a href="{{ route('pacientes.create') }}" 
                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                             Adicionar Paciente
@@ -16,11 +13,6 @@
                     </div>
                 </div>
             </div>        
-
-            <!-- Botão para adicionar pacientes -->
-
-
-            <!-- Tabela de pacientes -->
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 @if ($pacientes->isNotEmpty())
                     <table class="min-w-full divide-y divide-gray-200">
@@ -65,6 +57,9 @@
                             @endforeach
                         </tbody>
                     </table>
+                    <div class="mt-4">
+                        {{ $pacientes->links() }}
+                    </div>
                 @else
                     <div class="p-6 text-gray-500">
                         Nenhum paciente encontrado.

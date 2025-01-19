@@ -45,6 +45,9 @@
                                 @endforeach
                             </tbody>
                         </table>
+                        <div class="mt-4">
+                            {{ $especialidades->links() }}
+                        </div>
                     @else
                         <p class="text-gray-500">Nenhuma especialidade cadastrada no momento.</p>
                     @endif

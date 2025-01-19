@@ -44,6 +44,11 @@
                                 @endforeach
                             </tbody>
                         </table>
+                        
+                        <!-- Adicione os links de paginação -->
+                        <div class="mt-4">
+                            {{ $medicos->links() }}
+                        </div>
                     @else
                         <p class="text-gray-500">Nenhum médico cadastrado no momento.</p>
                     @endif

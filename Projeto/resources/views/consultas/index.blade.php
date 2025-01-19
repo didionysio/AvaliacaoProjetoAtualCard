@@ -44,6 +44,9 @@
                                 @endforeach
                             </tbody>
                         </table>
+                        <div class="mt-4">
+                            {{ $consultas->links() }}
+                        </div>
                     @else
                         <p class="text-gray-500">Nenhuma consulta encontrada.</p>
                     @endif

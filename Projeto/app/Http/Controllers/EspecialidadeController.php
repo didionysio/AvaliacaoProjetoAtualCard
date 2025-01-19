@@ -14,7 +14,7 @@ class EspecialidadeController extends Controller
      */
     public function index()
     {
-        $especialidades = Especialidade::all();
+        $especialidades = Especialidade::paginate(10);
         return view('especialidades.index', compact('especialidades'));
     }
 
