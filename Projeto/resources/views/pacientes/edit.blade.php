@@ -38,14 +38,32 @@
 
                         <div class="mb-4">
                             <label for="data_nascimento" class="block text-sm font-medium text-gray-700">Data de Nascimento</label>
-                            <input type="date" name="data_nascimento" id="data_nascimento" 
-                                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" 
-                                   value="{{ old('data_nascimento', $paciente->data_nascimento) }}" max="{{ date('Y-m-d') }}" required>
+                            <input 
+                                type="date" 
+                                name="data_nascimento" 
+                                id="data_nascimento" 
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" 
+                                value="{{ old('data_nascimento', $paciente->data_nascimento ?? '') }}" 
+                                max="{{ date('Y-m-d') }}" 
+                                required>
                             @error('data_nascimento')
                                 <div class="text-red-500 text-sm">{{ $message }}</div>
                             @enderror
                         </div>
-
+                        
+                        <div class="mb-4" id="cpf_responsavel_wrapper" style="{{ old('cpf_responsavel', $paciente->cpf_responsavel ?? '') ? '' : 'display: none;' }}">
+                            <label for="cpf_responsavel" class="block text-sm font-medium text-gray-700">CPF do Responsável</label>
+                            <input 
+                                type="text" 
+                                name="cpf_responsavel" 
+                                id="cpf_responsavel" 
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" 
+                                value="{{ old('cpf_responsavel', $paciente->cpf_responsavel ?? '') }}">
+                            @error('cpf_responsavel')
+                                <div class="text-red-500 text-sm">{{ $message }}</div>
+                            @enderror
+                        </div>
+                           
                         <div class="mb-4">
                             <label for="cep" class="block text-sm font-medium text-gray-700">CEP</label>
                             <input type="text" name="cep" id="cep" 

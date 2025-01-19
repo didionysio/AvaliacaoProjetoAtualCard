@@ -47,6 +47,19 @@
                             <div class="text-red-500 text-sm">{{ $message }}</div>
                         @enderror
                     </div>
+                    
+                    <div class="mb-4" id="cpf_responsavel_wrapper" style="display: none;">
+                        <label for="cpf_responsavel" class="block text-sm font-medium text-gray-700">CPF do Responsável</label>
+                        <input 
+                            type="text" 
+                            name="cpf_responsavel" 
+                            id="cpf_responsavel" 
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" 
+                            value="{{ old('cpf_responsavel') }}">
+                        @error('cpf_responsavel')
+                            <div class="text-red-500 text-sm">{{ $message }}</div>
+                        @enderror
+                    </div>               
                     <div class="mb-4">
                         <label for="email" class="block text-sm font-medium text-gray-700">E-mail</label>
                         <input type="email" name="email" id="email" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" value="{{ old('email') }}" required>

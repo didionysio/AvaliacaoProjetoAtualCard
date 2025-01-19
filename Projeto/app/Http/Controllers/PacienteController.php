@@ -42,6 +42,12 @@ class PacienteController extends Controller
             'endereco' => 'required|string|max:255',
             'numero' => 'required|string|max:10',
             'data_nascimento' => 'required|date|before_or_equal:today',
+            'cpf_responsavel' => [
+                'nullable',
+                'string',
+                new ValidaCpf(),
+                'different:cpf',
+            ],
         ]);
         
     
@@ -95,6 +101,13 @@ class PacienteController extends Controller
             'cep' => 'required',
             'endereco' => 'required',
             'numero' => 'required',
+            'data_nascimento' => 'required|date|before_or_equal:today',
+            'cpf_responsavel' => [
+                'nullable',
+                'string',
+                new ValidaCpf(),
+                'different:cpf',
+            ],
         ]);
 
         $paciente->update($request->except('cpf'));

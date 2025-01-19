@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('endereco');
             $table->string('numero');
             $table->date('data_nascimento');
+            $table->string('cpf_responsavel')->nullable();
             $table->timestamps();
         });
     }

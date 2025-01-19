@@ -20,6 +20,7 @@ class Paciente extends Model
         'endereco',
         'numero',
         'data_nascimento',
+        'cpf_responsavel'
     ];
 
     public function telefones()
