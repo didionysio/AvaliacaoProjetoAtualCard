@@ -6,7 +6,9 @@ use App\Models\Consulta;
 use App\Models\Paciente;
 use App\Models\Medico;
 use App\Models\Especialidade;
+use App\Mail\ConsultaCadastrada;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class ConsultaController extends Controller
 {
@@ -49,8 +51,8 @@ class ConsultaController extends Controller
             'data_consulta' => 'required|date|after_or_equal:today',
         ]);
     
-        Consulta::create($request->all());
-    
+        $consulta = Consulta::create($request->all());
+        Mail::to($consulta->paciente->email)->send(new ConsultaCadastrada($consulta));
         return redirect()->route('consultas.index')->with('success', 'Consulta cadastrada com sucesso!');
     }
     
