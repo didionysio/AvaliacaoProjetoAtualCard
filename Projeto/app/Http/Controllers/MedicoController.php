@@ -110,10 +110,18 @@ class MedicoController extends Controller
     public function destroy($id)
     {
         $medico = Medico::findOrFail($id);
+    
+        // Verifica se o médico está vinculado a alguma consulta
+        if ($medico->consultas()->exists()) {
+            return redirect()->route('medicos.index')
+                             ->with('error', 'Não é possível excluir o médico, pois ele está vinculado a uma ou mais consultas.');
+        }
+    
         $medico->delete();
-
+    
         return redirect()->route('medicos.index')->with('success', 'Médico removido com sucesso.');
     }
+    
 
     /**
      * Busca médicos com base na especialidade e CRM.

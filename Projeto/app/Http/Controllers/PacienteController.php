@@ -112,10 +112,17 @@ class PacienteController extends Controller
     public function destroy($id)
     {
         $paciente = Paciente::findOrFail($id);
+    
+        // Verifica se o paciente está vinculado a consultas
+        if ($paciente->consultas()->exists()) {
+            return redirect()->route('pacientes.index')
+                             ->with('error', 'Não é possível excluir o paciente, pois ele está vinculado a uma ou mais consultas.');
+        }
+    
         $paciente->delete();
-
+    
         return redirect()->route('pacientes.index')
-                        ->with('success', 'Paciente removido com sucesso.');
+                         ->with('success', 'Paciente removido com sucesso.');
     }
 
     /**
