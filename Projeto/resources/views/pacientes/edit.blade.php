@@ -63,7 +63,15 @@
                                 <div class="text-red-500 text-sm">{{ $message }}</div>
                             @enderror
                         </div>
-                           
+                        <h2 class="mb-4 text-lg font-bold text-gray-800">Telefones</h2>
+                        <div id="telefone-container">
+                            @foreach ($paciente->telefones as $index => $telefone)
+                                <x-telefone-input :value="$telefone->numero" :index="$index" />
+                            @endforeach
+                        </div>
+                        <button type="button" id="add-telefone" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">
+                            Adicionar Telefone
+                        </button>
                         <div class="mb-4">
                             <label for="cep" class="block text-sm font-medium text-gray-700">CEP</label>
                             <input type="text" name="cep" id="cep" 

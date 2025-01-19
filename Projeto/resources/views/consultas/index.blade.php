@@ -7,7 +7,7 @@
                         <h1 class="text-2xl font-bold">Lista de Consultas</h1>
                         <a href="{{ route('consultas.create') }}" 
                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                            + Cadastrar Consulta
+                            Cadastrar Consulta
                         </a>
                     </div>
 

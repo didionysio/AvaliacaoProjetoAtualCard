@@ -7,7 +7,7 @@
                         <h1 class="text-2xl font-bold">Lista de Médicos</h1>
                         <a href="{{ route('medicos.create') }}" 
                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                            + Adicionar Médico
+                            Adicionar Médico
                         </a>
                     </div>
                     

@@ -12,7 +12,18 @@
                     </div>
                 </div>
             </div>  
-
+            @if(session('success'))
+                <div class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
+                    {{ session('success') }}
+                </div>
+            @endif
+            
+            @if(session('error'))
+                <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+                    {{ session('error') }}
+                </div>
+            @endif
+            
             <div class="bg-white p-6 mt-6 rounded-lg shadow-sm">
                 <h1 class="mb-4 text-xl font-bold text-gray-800">Adicionar Paciente</h1>
                 <form action="{{ route('pacientes.store') }}" method="POST">
@@ -59,7 +70,15 @@
                         @error('cpf_responsavel')
                             <div class="text-red-500 text-sm">{{ $message }}</div>
                         @enderror
-                    </div>               
+                    </div>
+                    <!-- Telefone -->
+                    <h2 class="mb-4 text-lg font-bold text-gray-800">Telefones</h2>
+                    <div id="telefone-container">
+                        <x-telefone-input />
+                    </div>
+                    <button type="button" id="add-telefone" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">
+                        Adicionar Telefone
+                    </button>      
                     <div class="mb-4">
                         <label for="email" class="block text-sm font-medium text-gray-700">E-mail</label>
                         <input type="email" name="email" id="email" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" value="{{ old('email') }}" required>

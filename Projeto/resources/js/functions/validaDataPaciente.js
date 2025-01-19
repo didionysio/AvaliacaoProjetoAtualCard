@@ -1,31 +1,36 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const dataNascimentoInput = document.getElementById('data_nascimento');
-    const cpfResponsavelWrapper = document.getElementById('cpf_responsavel_wrapper');
+    const bodyClass = document.body.className;
 
-    function verificarIdade() {
-        const dataNascimento = dataNascimentoInput.value;
-        if (!dataNascimento) return;
+    // Executa o script apenas nas páginas de create ou edit de pacientes
+    if (bodyClass.includes('pacientes-create') || bodyClass.includes('pacientes-edit')) {
+        const dataNascimentoInput = document.getElementById('data_nascimento');
+        const cpfResponsavelWrapper = document.getElementById('cpf_responsavel_wrapper');
 
-        const hoje = new Date();
-        const nascimento = new Date(dataNascimento);
-        let idade = hoje.getFullYear() - nascimento.getFullYear();
-        const mes = hoje.getMonth() - nascimento.getMonth();
+        function verificarIdade() {
+            const dataNascimento = dataNascimentoInput.value;
+            if (!dataNascimento) return;
 
-        if (mes < 0 || (mes === 0 && hoje.getDate() < nascimento.getDate())) {
-            idade--;
+            const hoje = new Date();
+            const nascimento = new Date(dataNascimento);
+            let idade = hoje.getFullYear() - nascimento.getFullYear();
+            const mes = hoje.getMonth() - nascimento.getMonth();
+
+            if (mes < 0 || (mes === 0 && hoje.getDate() < nascimento.getDate())) {
+                idade--;
+            }
+
+            // Mostra ou esconde o campo de CPF do Responsável
+            if (idade < 12) {
+                cpfResponsavelWrapper.style.display = '';
+            } else {
+                cpfResponsavelWrapper.style.display = 'none';
+            }
         }
 
-        // Mostra ou esconde o campo de CPF do Responsável
-        if (idade < 12) {
-            cpfResponsavelWrapper.style.display = '';
-        } else {
-            cpfResponsavelWrapper.style.display = 'none';
-        }
+        // Verifica ao carregar a página
+        verificarIdade();
+
+        // Verifica ao alterar a data de nascimento
+        dataNascimentoInput.addEventListener('change', verificarIdade);
     }
-
-    // Verifica ao carregar a página
-    verificarIdade();
-
-    // Verifica ao alterar a data de nascimento
-    dataNascimentoInput.addEventListener('change', verificarIdade);
 });

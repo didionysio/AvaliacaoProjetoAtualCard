@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Paciente;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Rules\ValidaCpf;
 use Carbon\Carbon;
 
@@ -42,6 +43,7 @@ class PacienteController extends Controller
             'endereco' => 'required|string|max:255',
             'numero' => 'required|string|max:10',
             'data_nascimento' => 'required|date|before_or_equal:today',
+            'telefones.*' => 'required|string|regex:/^\(?\d{2}\)?[\s-]?\d{4,5}-?\d{4}$/',
             'cpf_responsavel' => [
                 'nullable',
                 'string',
@@ -51,10 +53,30 @@ class PacienteController extends Controller
         ]);
         
     
-        Paciente::create($request->all());
+        DB::beginTransaction();
+
+        try {
+            $paciente = Paciente::create($request->except('telefones'));
     
-        return redirect()->route('pacientes.index')
-                         ->with('success', 'Paciente criado com sucesso.');
+            // Salva os telefones
+            if ($request->has('telefones')) {
+                foreach ($request->telefones as $numero) {
+                    if ($numero) {
+                        $paciente->telefones()->create(['numero' => $numero]);
+                    }
+                }
+            }
+    
+            DB::commit();
+    
+            return redirect()->route('pacientes.index')
+                             ->with('success', 'Paciente criado com sucesso.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+    
+            return redirect()->route('pacientes.create')
+                             ->with('error', 'Ocorreu um erro ao cadastrar o paciente: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -78,7 +100,7 @@ class PacienteController extends Controller
      */
     public function edit($id)
     {
-        $paciente = Paciente::findOrFail($id);
+        $paciente = Paciente::with('telefones')->findOrFail($id);
         return view('pacientes.edit', compact('paciente'));
     }
 
@@ -93,7 +115,7 @@ class PacienteController extends Controller
     public function update(Request $request, string $id)
     {
         $paciente = Paciente::findOrFail($id);
-
+    
         // Valida os campos (CPF não pode ser alterado)
         $request->validate([
             'nome' => 'required|string|max:255',
@@ -108,13 +130,39 @@ class PacienteController extends Controller
                 new ValidaCpf(),
                 'different:cpf',
             ],
+            'telefones.*' => 'required|string|regex:/^\(?\d{2}\)?[\s-]?\d{4,5}-?\d{4}$/',
         ]);
-
-        $paciente->update($request->except('cpf'));
-
-        return redirect()->route('pacientes.index')
-                        ->with('success', 'Paciente atualizado com sucesso.');
+    
+        DB::beginTransaction();
+    
+        try {
+            $paciente->update($request->except(['telefones', 'cpf']));
+    
+            // Atualiza os telefones
+            if ($request->has('telefones')) {
+                // Remove os telefones existentes antes de adicionar os novos
+                $paciente->telefones()->delete();
+    
+                foreach ($request->telefones as $numero) {
+                    if ($numero) {
+                        $paciente->telefones()->create(['numero' => $numero]);
+                    }
+                }
+            }
+    
+            // Confirma a transação
+            DB::commit();
+    
+            return redirect()->route('pacientes.index')
+                             ->with('success', 'Paciente atualizado com sucesso.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+    
+            return redirect()->route('pacientes.edit', $id)
+                             ->with('error', 'Ocorreu um erro ao atualizar o paciente: ' . $e->getMessage());
+        }
     }
+    
 
     /**
      * Remove um paciente específico do banco de dados.

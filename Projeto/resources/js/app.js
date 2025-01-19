@@ -6,6 +6,7 @@ import './functions/crm';
 import './functions/viacep';
 import './functions/medicoSearch';
 import './functions/validaDataPaciente'
+import './functions/telefoneFunction'
 
 window.Alpine = Alpine;
 
